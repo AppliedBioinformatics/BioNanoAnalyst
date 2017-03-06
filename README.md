@@ -3,11 +3,11 @@ BioNanoAnalyst is a tool providing  GUI to assess the genome assembly quality us
 
 # Introduction
 
-  Before using this tool, please make sure your platform satisfies the requirement below:
+Before using this tool, please make sure your platform satisfies the requirement below:
 
-  There are at least 2 CPUs in your machine
+1. There are at least 2 CPUs in your machine
   
-  For Linux or macOS operating system, a Python (version:2.7.x) and corresponding packages are required (see details below)
+2. For Linux or macOS operating system, a Python (version:2.7.x) and corresponding packages are required (see details below)
 
 #Python Installation
 
@@ -66,7 +66,7 @@ Biopython ($pip install biopython or http://biopython.org/)
 
 Image ($pip  install Image)
 
-PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. If you use PySide, please change all PyQt4 in all scripts into PySide) 
+PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $pip install PySide) 
 
 # Run BioNanoAnalyst 
 1. For the Windows version:
@@ -75,15 +75,13 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. If y
 
   Unzip the "Windows_version.7z" file downloaded from the "release panel" 
   
-  Find the App.exe
-  
-  Directly run it
+  Find the App.exe and directly run it
 
 2. For the Linux or Mac version: 
 
   Please download the source code 
 
-  Run the application using $ python App.py
+  After install python and all required python packages, please run the application using $ python App.py
 
 #Note: 
 
