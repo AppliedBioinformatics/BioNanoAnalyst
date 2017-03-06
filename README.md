@@ -73,7 +73,7 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
 
   Please go to www.7-zip.org and download 7-zip
 
-  Unzip the "Windows_version.7z" file downloaded from the "release panel" 
+  Unzip the "Windows_version.7z" file downloaded from the "releases panel" 
   
   Find the App.exe and directly run it
 
