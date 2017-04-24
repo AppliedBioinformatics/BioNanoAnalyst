@@ -71,17 +71,17 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
 # Run BioNanoAnalyst 
 #For the Windows version:
 
-  Please go to www.7-zip.org and download 7-zip
+  1. Please go to www.7-zip.org and download 7-zip
 
-  Unzip the "Windows_version.7z" file downloaded from the "releases panel" 
+  2. Unzip the "Windows_version.7z" file downloaded from the "releases panel" 
   
-  Find the App.exe and directly run it
+  3. Find the App.exe and directly run it
 
 #For the Linux or Mac version: 
 
-  Please download the source code 
+  1. Please download the source code 
 
-  After install python and all required python packages, please run the application using $ python App.py.
+  2. After install python and all required python packages, please run the application using $ python App.py.
   
   A tutorial is given in the Wiki page: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
 
