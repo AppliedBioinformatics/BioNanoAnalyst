@@ -69,7 +69,7 @@ Image ($pip  install Image)
 PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $pip install PySide. Please refer Issue #1) 
 
 # Run BioNanoAnalyst 
-1. For the Windows version:
+#For the Windows version:
 
   Please go to www.7-zip.org and download 7-zip
 
@@ -77,7 +77,7 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
   
   Find the App.exe and directly run it
 
-2. For the Linux or Mac version: 
+#For the Linux or Mac version: 
 
   Please download the source code 
 
