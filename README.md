@@ -83,7 +83,8 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
 
   2. After install python and all required python packages, please run the application using $ python App.py.
   
-  A tutorial is given in the Wiki page: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
+ 
+ A tutorial is given in the Wiki page to show how to run BioNanoAnalyst: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
 
 #Note: 
 
