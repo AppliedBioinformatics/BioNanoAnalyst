@@ -69,6 +69,9 @@ Image ($pip  install Image)
 PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $pip install PySide. Please refer Issue #1) 
 
 # Run BioNanoAnalyst 
+
+A tutorial is given in the Wiki page to show how to run BioNanoAnalyst: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
+
 #For the Windows version:
 
   1. Please go to www.7-zip.org and download 7-zip
@@ -82,9 +85,6 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
   1. Please download the source code 
 
   2. After install python and all required python packages, please run the application using $ python App.py.
-  
- 
- A tutorial is given in the Wiki page to show how to run BioNanoAnalyst: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
 
 #Note: 
 
