@@ -70,7 +70,7 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $
 
 # Run BioNanoAnalyst 
 
-A tutorial is given in the Wiki page to show how to run BioNanoAnalyst: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst-in-terminal
+A tutorial is given in the Wiki page to show how to run BioNanoAnalyst: https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst
 
 #For the Windows version:
 
