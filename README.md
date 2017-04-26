@@ -7,7 +7,7 @@ Before using this tool, please make sure your platform satisfies the requirement
 
 1. There are at least 2 CPUs in your machine
   
-2. For Linux or macOS operating system, a Python (version:2.7.x) and corresponding packages are required (see details below)
+2. For Linux or macOS operating system, a Python (version:2.7.xx) and corresponding packages are required (see details below)
 
 #Python Installation
 
