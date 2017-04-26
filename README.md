@@ -3,7 +3,7 @@ BioNanoAnalyst is a tool providing  GUI to assess the genome assembly quality us
 
 # Introduction
 
-Before using this tool, please make sure your platform satisfies the requirement below:
+Before using this tool, please make sure your platform satisfies the requirements below:
 
 1. There are at least 2 CPUs in your machine
   
@@ -15,7 +15,7 @@ Before using this tool, please make sure your platform satisfies the requirement
 
 2. Unpack the downloaded file, for exmaple using 
   
-  $ tar -zxvf Python-2.7.12.tar.gz in your terminal
+  $ tar -zxvf Python-2.7.xx.tar.gz in your terminal
 
 3. Then enter into the created directory:
   
@@ -66,7 +66,7 @@ Biopython ($pip install biopython or http://biopython.org/)
 
 Image ($pip  install Image)
 
-PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $pip install PySide. Please refer Issue #1) 
+PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download. or $pip install PySide. If you have problem in installing this package, please refer Issue #1) 
 
 # Run BioNanoAnalyst 
 
