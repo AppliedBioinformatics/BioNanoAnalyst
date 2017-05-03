@@ -78,7 +78,7 @@ class Ui_About(object):
     def retranslateUi(self, About):
         About.setWindowTitle(_translate("About", "About BioNanoAnalyst", None))
         self.label.setText(_translate("About", "Application: BioNanoAnalyst", None))
-        self.label_2.setText(_translate("About", "Version:      1.0", None))
+        self.label_2.setText(_translate("About", "Version:      1.1.1", None))
         self.label_3.setText(_translate("About", "Copyright by Applied Bioinformatics Group", None))
         self.label_4.setText(_translate("About", "University of western Australia, Perth, WA, Australia", None))
         self.textBrowser.setHtml(_translate("About", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

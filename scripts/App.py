@@ -428,7 +428,8 @@ class Main(QtGui.QMainWindow):
             else:
                 path=self.output_path
             name='BioNanoAnalyst_report_cs%s_%s.gff3'% (self.cs,curr_time)
-            test=len(self.running.overall)
+            name_all='BioNanoAnalyst_report_overall_pairs_cs%s_%s.txt'% (self.cs, curr_time)
+	    test=len(self.running.overall)
             fd=open(os.path.join(path,name),'w')
             for j in self.running.overall['contig'].unique():
                 sub=self.running.overall[self.running.overall['contig']==j].reset_index(drop=True)
@@ -455,9 +456,9 @@ class Main(QtGui.QMainWindow):
                         fd.write('%s\tBioNanoAnalyst\tOptical_mapping\t%s\t%s\t.\t.\t.\tName=%s\n'% (ctg,startp, endp, sub['mapping_status'][i-1]))
                         startp=endp
                     if score1<score2 and i==len(sub)-1:
-                        fd.write('%s\tBioNanoAnalyst\tOptical_mapping\t%s\t%s\t.\t.\t.\tName=%s\n'% (ctg,startp, sub['position'][i], sub['mapping_status'][i]))                    
+                        fd.write('%s\tBioNanoAnalyst\tOptical_mapping\t%s\t%s\t.\t.\t.\tName=%s\n'% (ctg,startp, sub['position'][i], sub['mapping_status'][i]))
                     i+=1
-            #self.running.overall.to_csv(os.path.join(path,name+'tt'),sep='\t', index=False)
+            self.running.paired.to_csv(os.path.join(path,name_all),sep='\t', index=False)
         except IOError:
             return QtGui.QMessageBox.question(self, 'Error !', 'Please select an output loaction !',QtGui.QMessageBox.Ok)
         except AttributeError:

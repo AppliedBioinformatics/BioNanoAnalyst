@@ -871,7 +871,7 @@ class Ui_BioNanoAnalyst(object):
         self.rcmap_label.setText(_translate("BioNanoAnalyst", "Ref cmap file", None))
         self.rcmap_select_bn.setText(_translate("BioNanoAnalyst", "Select", None))
         self.xmap_clear_bn.setText(_translate("BioNanoAnalyst", "Clear", None))
-        self.analyze_title.setText(_translate("BioNanoAnalyst", "Start to Analyze", None))
+        self.analyze_title.setText(_translate("BioNanoAnalyst", "Start to Analyse", None))
         self.analyse_bn.setText(_translate("BioNanoAnalyst", "Analyse", None))
         self.cs_label.setText(_translate("BioNanoAnalyst", "Confidence score", None))
         self.label_10.setText(_translate("BioNanoAnalyst", "Job Status:", None))

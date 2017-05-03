@@ -236,7 +236,7 @@ class BioNano(object):
         procs = []
         tasks = multiprocessing.cpu_count()-1
         nAnchor = len(self.Anchors())
-        pairwise=np.empty(shape=[0,22])
+        pairwise=np.empty(shape=[0,23])
         if nAnchor%tasks!=0:
             vol = nAnchor//(tasks-1)
         else:
@@ -268,12 +268,12 @@ class BioNano(object):
         names=['RefContigID','Contig','RefLen','RefNumSites','QryContigID','QryLen','QryNumSites',
         'RefSiteId_1','RefSiteId_2','RefSiteDis','Ref_site1_pos','Ref_site2_pos','Ref_pos_dis',
         'QrySiteId_1','QrySiteId_2','QrySiteDis','Qry_site1_pos','Qry_site2_pos','Qry_pos_dis',
-        'Qry_site1_cov','Qry_site2_cov','Orientation']
+        'Qry_site1_cov','Qry_site2_cov','Orientation','Dis_diff']
         pairwise=pd.DataFrame(pairwise,columns=names)
         tsf = ['RefContigID','RefLen','RefNumSites','QryContigID','QryLen','QryNumSites',
         'RefSiteId_1','RefSiteId_2','RefSiteDis','Ref_site1_pos','Ref_site2_pos','Ref_pos_dis',
         'QrySiteId_1','QrySiteId_2','QrySiteDis','Qry_site1_pos','Qry_site2_pos','Qry_pos_dis',
-        'Qry_site1_cov','Qry_site2_cov']
+        'Qry_site1_cov','Qry_site2_cov', 'Dis_diff']
         pairwise[tsf]=pairwise[tsf].apply(pd.to_numeric)
         self.paired = pairwise.sort_values(['RefContigID','RefSiteId_1','Ref_site1_pos'],
         ascending=[True, True, True]).reset_index(drop=True)
@@ -295,7 +295,7 @@ class BioNano(object):
 
     def pairwise(self,chunck,nsec,out_q):
         sleep(nsec)
-        pairwise = np.empty(shape=[0,22])
+        pairwise = np.empty(shape=[0,23])
         for i in chunck:
             sub_detail = self.detail[self.detail['RefContigID']==i].reset_index(drop=True)
             Qrys = sub_detail['QryContigID'].unique()
@@ -324,9 +324,10 @@ class BioNano(object):
                     qry_pos_1 = sub['QrySitePos'][p_1-1]
                     qry_pos_2 = sub['QrySitePos'][p_2-1]
                     qry_pos_dis = abs(qry_pos_2 -qry_pos_1)
+                    dis_dif = float("%.1f"%(ref_pos_dis - qry_pos_dis))
                     pairwise = np.append(pairwise,[[i,ctg,ctg_len,numSites,qry_ctg,qry_len,qry_numSite,ref_rs_1,
                     ref_rs_2,ref_rs_dis,ref_pos_1,ref_pos_2,ref_pos_dis, qry_rs_1,qry_rs_2,qry_rs_dis,
-                    qry_pos_1,qry_pos_2,qry_pos_dis,qry_cov_1,qry_cov_2,ori]],axis=0)
+                    qry_pos_1,qry_pos_2,qry_pos_dis,qry_cov_1,qry_cov_2,ori,dis_dif]],axis=0)
                     p_1+=1
                     p_2+=1
 
@@ -376,13 +377,14 @@ class BioNano(object):
     def checkStatus(self):
         Q_dis=np.empty(shape=[0,10])
         Q_rs=np.empty(shape=[0,12])
+        pos_diff = []
+        pos_coor={}
+        a=0
         for ctg in self.Anchors():
             sub_paired = self.paired[self.paired['RefContigID']==ctg].reset_index(drop=True)
             qrys = sub_paired['QryContigID'].unique()
             for i in qrys:
                 sub = sub_paired[sub_paired['QryContigID']==i].reset_index(drop=True)
-                pos_coor={}
-                pos_diff = []
                 for j in range(len(sub)):
                     index=sub['RefContigID'][j]
                     name = sub['Contig'][j]
@@ -399,11 +401,10 @@ class BioNano(object):
                     cov_1 = sub['Qry_site1_cov'][j]
                     cov_2 = sub['Qry_site2_cov'][j]
                     ori = sub['Orientation'][j]
-                    if qry_site_dis >0:
-                        dis_dif = abs(ref_pos_dis - qry_pos_dis)
-                        pos_diff.append(dis_dif)
-                        pos_coor[dis_dif]=[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2]
-
+                    dis_dif = float(ref_pos_dis - qry_pos_dis)
+                    pos_diff.append(dis_dif)
+                    pos_coor[a]=[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2]
+                    a+=1
                     if ref_site_dis==0:
                         if qry_site_dis==1:
                             Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,'Collapsed','None']],axis=0)
@@ -438,7 +439,7 @@ class BioNano(object):
                             if qry_site_dis==1:
                                 ref_missed_sites=str(range(ref_site1+1,ref_site2))
                                 Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,ref_missed_sites,'None']],axis=0)
-                            if qry_site1+1<qry_site2 and ref_site_dis!=qry_site_dis:
+                            if qry_site1+1<qry_site2:
                                 ref_missed_sites=str(range(ref_site1+1,ref_site2))
                                 qry_missed_sites=str(range(qry_site1+1,qry_site2))
                                 Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,ref_missed_sites,qry_missed_sites]],axis=0)
@@ -452,7 +453,7 @@ class BioNano(object):
                             if qry_site_dis==1:
                                 ref_missed_sites=str(range(ref_site1+1,ref_site2))
                                 Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,ref_missed_sites,'None']],axis=0)
-                            if qry_site1-1>qry_site2 and ref_site_dis!=qry_site_dis:
+                            if qry_site1-1>qry_site2:
                                ref_missed_sites=str(range(ref_site1+1,ref_site2))
                                qry_missed_sites=str(range(qry_site1-1,qry_site2,-1))
                                Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,ref_missed_sites,qry_missed_sites]],axis=0)
@@ -460,18 +461,22 @@ class BioNano(object):
                                 ref_missed_sites=str(range(ref_site1+1,ref_site2))
                                 Q_rs = np.append(Q_rs,[[index,name,ref_site1,ref_pos1,ref_site2,ref_pos2,qry_site1,qry_site2,cov_1,cov_2,ref_missed_sites,'chimeric region']],axis=0)
 
-                dis = np.array(pos_diff)
-                Q3 = np.percentile(dis,75)
-                Q1 = np.percentile(dis,25)
-                IQR = Q3-Q1
-                #lower = Q1-1.5*IQR
-                upper = Q3+1.5*IQR
-                for m in pos_diff:
-                    if m>upper:
-                        Q_dis = np.append(Q_dis,[pos_coor[m]],axis=0)
+        dis = np.array(pos_diff)
+        Q3 = np.percentile(dis,75)
+        Q1 = np.percentile(dis,25)
+        IQR = Q3-Q1
+        lower = Q1-1.5*IQR
+        upper = Q3+1.5*IQR
+        #print 'Distance difference lower boundary is: %s' % lower
+        #print 'Distance difference upper boundary is: %s' % upper
+        b=0
+        for m in pos_diff:
+            if m>upper or m<lower:
+                Q_dis = np.append(Q_dis,[pos_coor[b]],axis=0)
+            b+=1
         self.Q_dis=pd.DataFrame(Q_dis,columns=['Index','Contig','RefSiteId_1','Ref_pos_1','RefSiteId_2','Ref_pos_2','QrySiteId_1','QrySiteId_2','Qry_cov1','Qry_cov2'])
         self.Q_rs=pd.DataFrame(Q_rs,columns=['Index','Contig','RefSiteId_1','Ref_pos_1','RefSiteId_2','Ref_pos_2','QrySiteId_1','QrySiteId_2','Qry_cov1','Qry_cov2','Ref_missed_sites','Qry_missed_sites'])
-        #print self.Q_rs
+
     def merge(self):
         good = np.empty(shape=[0,5])
         q_rs_a= np.empty(shape=[0,5])
@@ -494,37 +499,47 @@ class BioNano(object):
             for b in range(len(sub_q_rs)):
                 rs1 = int(sub_q_rs['RefSiteId_1'][b])
                 rs2 = int(sub_q_rs['RefSiteId_2'][b])
-                q_rs+=range(rs1,rs2+1)
+                if rs1<=rs2:
+                    q_rs+=range(rs1,rs2+1)
+                else:
+                    q_rs+=range(rs1,rs2-1,-1)
             for c in range(len(sub_q_dis)):
                 ds1 = int(sub_q_dis['RefSiteId_1'][c])
                 ds2 = int(sub_q_dis['RefSiteId_2'][c])
-                q_dis+=range(ds1,ds2+1)
+                if ds1<=ds2:
+                    q_dis+=range(ds1,ds2+1)
+                else:
+                    q_dis+=range(ds1,ds2-1,-1)
             Q_a= set(q_dis+q_rs+mis_sites)
             overlaps=set(q_rs).intersection(q_dis)
             Q_r = [r for r in q_rs if r not in q_dis]
             Q_d = [d for d in q_dis if d not in q_rs]
-            for e in overlaps:
-                for check in range(len(sub_q_rs)):
-                    c1=int(sub_q_rs['RefSiteId_1'][check])
-                    c2=int(sub_q_rs['RefSiteId_2'][check])
-                    if c1==e and c2 not in q_dis:
-                        Q_r.append(e)
-                        Q_r.append(c2)
-                    if c2 ==e and c1 not in q_dis:
-                        Q_r.append(e)
-                        Q_r.append(c1)
+            
+            Overlaps=list(overlaps)
+            if len(Overlaps)>0:
+                for e in Overlaps:
+                    for check in range(len(sub_q_rs)):
+                        c1=int(sub_q_rs['RefSiteId_1'][check])
+                        c2=int(sub_q_rs['RefSiteId_2'][check])
+                        if c1==e and c2 not in Overlaps:
+                            Q_r.append(e)
+                            overlaps.discard(e)
+                        if c2 ==e and c1 not in Overlaps:
+                            Q_r.append(e) 
+                            overlaps.discard(e)
             Q_r=sorted(set(Q_r))
 
-            for e in overlaps:
-                for check in range(len(sub_q_dis)):
-                    c1=int(sub_q_dis['RefSiteId_1'][check])
-                    c2=int(sub_q_dis['RefSiteId_2'][check])
-                    if c1==e and c2 not in q_rs:
-                        Q_d.append(e)
-                        Q_d.append(c2)
-                    if c2 ==e and c1 not in q_rs:
-                        Q_d.append(e)
-                        Q_d.append(c1)
+            if len(Overlaps)>0:
+                for e in Overlaps:
+                    for check in range(len(sub_q_dis)):
+                        c1=int(sub_q_dis['RefSiteId_1'][check])
+                        c2=int(sub_q_dis['RefSiteId_2'][check])
+                        if c1 ==e and c2 not in Overlaps:
+                            Q_d.append(e)
+                            overlaps.discard(e)
+                        if c2 ==e and c1 not in Overlaps:
+                            Q_d.append(e)
+                            overlaps.discard(e)
             Q_d=sorted(set(Q_d))
 
             for j in range(1, numSites+1):
@@ -538,7 +553,7 @@ class BioNano(object):
                     numSites = sub_rcmap['NumSites'][j-1]
                     good = np.append(good,[[i,name,j,pos,numSites]],axis=0)
                     overall = np.append(overall,[[i,name,j,pos,numSites,cov,'Consistent',4]],axis=0)
-                if j in Q_d:
+                if j in Q_d :
                     pos = sub_rcmap['Position'][j-1]
                     numSites = sub_rcmap['NumSites'][j-1]
                     q_dis_a =np.append(q_dis_a,[[i,name,j,pos,numSites]],axis=0)
@@ -548,12 +563,12 @@ class BioNano(object):
                     numSites = sub_rcmap['NumSites'][j-1]
                     q_rs_a =np.append(q_rs_a,[[i,name,j,pos,numSites]],axis=0)
                     overall = np.append(overall,[[i,name,j,pos,numSites,cov,'Number_discordant',3]],axis=0)
-                if j in overlaps and j not in Q_r and j not in Q_d:
+                if j in overlaps:
                     pos = sub_rcmap['Position'][j-1]
                     numSites = sub_rcmap['NumSites'][j-1]
                     both =np.append(both,[[i,name,j,pos,numSites]],axis=0)
                     overall = np.append(overall,[[i,name,j,pos,numSites,cov,'Num+dis_discordant',1]],axis=0)
-                if j in mis_sites and j not in q_rs and j not in q_dis:
+                if j in mis_sites and j not in q_dis and j not in q_rs and j not in overlaps:
                     pos = sub_rcmap['Position'][j-1]
                     numSites = sub_rcmap['NumSites'][j-1]
                     overall = np.append(overall,[[i,name,j,pos,numSites,cov,'missing',0]],axis=0)
@@ -564,79 +579,3 @@ class BioNano(object):
         self.q_dis_a = pd.DataFrame(q_dis_a,columns=['index','contig','siteID','position','numSites'])
         self.both = pd.DataFrame(both,columns=['index','contig','siteID','position','numSites'])
 
-
-def make_RefCmap(fasta_file, enz=None, min_len=20, min_nsite=5, path=None):
-    name = fasta_file.rsplit('.',1)[0].split('/')[-1]
-    index = 0
-    enzymes = {'BspQI':'GCTCTTC',
-                'BbvCI':'CCTCAGC',
-                'Bsml':'GAATGC',
-                'BsrDI':'GCAATG',
-                'bseCI':'ATCGAT'}
-    try:
-        cmap_file='%s/%s_%s.cmap'%(path,name,enz)
-        forwards = enzymes[enz]
-        reverse = str(Seq(forwards).reverse_complement())
-        with open (cmap_file,'a') as ref_cmap:
-            ref_cmap.write('# CMAP File Version:\t0.1\n')
-            ref_cmap.write('# Label Channels:\t1\n')
-            ref_cmap.write('# Nickase Recognition Site 1:\t%s\n'%forwards)
-            ref_cmap.write('# Enzyme1:\tNt.%s\n'%enz)
-            ref_cmap.write('# Number of Consensus Nanomaps:\tN/A\n')
-            ref_cmap.write('#h CMapId\tContigLength\tNumSites\tSiteID\tLabelChannel\tPosition\tStdDev\tCoverage\tOccurrence\n')
-            ref_cmap.write('#f int\tfloat\tint\tint\tint\tfloat\tfloat\tint\tint\n')
-            for seqs in SeqIO.parse(fasta_file,'fasta'):
-       	        seq = str(seqs.seq.upper())
-       	        seq_len = len(seq)
-       	        index+=1
-       	        if seq_len >= min_len*1000:
-                    nsites = len(re.findall('%s|%s'%(forwards,reverse),seq))
-                    if nsites >=min_nsite:
-                        j=1
-                        for o in re.finditer('%s|%s'%(forwards,reverse),seq):
-                            ref_cmap.write('%s\t%.1f\t%d\t%d\t1\t%.1f\t1.0\t1\t1\n'%(index,seq_len,nsites,j,o.start()+1))
-                            j+=1
-                        ref_cmap.write('%s\t%.1f\t%d\t%d\t0\t%.1f\t0.0\t1\t0\n'%(index,seq_len,nsites,j,seq_len))
-    except:
-        pass
-
-def makeBed(ref,Ns=10):
-    name = ref.rsplit('.',1)[0].split('/')[-1]
-    i = 0
-    Ns = int(Ns)+1
-    ns = 1
-    detail = np.empty(shape=[0,7])
-    for seqs in SeqIO.parse(ref,'fasta'):
-        Oid = seqs.id
-        seq = str(seqs.seq.upper())
-        Olen = len(seq)
-        left = seq
-        j = 0
-        start = 0
-        end = 0
-        for reads in re.split('N{%s,}'% Ns, seq):
-            if len(reads)>0:
-                j+= 1
-                i+= 1
-                s_id = 'contig_%s'%j
-                a_id = 'Contig_%s'%i
-                length = len(reads)
-                if left.find(reads) == 0:
-                    left = seq[len(reads):]
-                    start = end+1
-                    end = start+len(reads)-1
-                    detail =np.append(detail,[[ns,Oid,length,s_id,start,end, a_id]],axis=0)
-                if left.find(reads)>0 and left[left.find(reads):].find('N')!=-1:
-                    start = end+1+left.find(reads)
-                    left = left[left.find(reads)+len(reads):]
-                    end = start+len(reads)-1
-                    detail =np.append(detail,[[ns,Oid,length,s_id,start,end,a_id]],axis=0)
-                if left.find(reads)>0 and left[left.find(reads):].find('N')==-1:
-                    start = end+1+left.find(reads)
-                    end = start+len(reads)-1
-                    detail =np.append(detail,[[ns,Oid,length,s_id,start,end,a_id]],axis=0)
-            else:
-                next
-        ns+= 1
-    ref_detail = pd.DataFrame(detail,columns=['Index','Contig','Length(bp)','Splitted_ctg','Start','End','Id_in_all'])
-    #ref_detail.to_csv('%s.bed'% name, sep='\t')
