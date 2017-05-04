@@ -589,7 +589,7 @@ def make_RefCmap(fasta_file, enz=None, min_len=20, min_nsite=5, path=None):
                 'bseCI':'ATCGAT',
                 'BssSI':'CACGAG'}
     try:
-        cmap_file='%s/%s_%s_%sKb_%slabels.cmap'%(path,name,enz,min_len,min_nsite)
+        cmap_file='%s/%s_%s.cmap'%(path,name,enz)
         forwards = enzymes[enz]
         reverse = str(Seq(forwards).reverse_complement())
         with open (cmap_file,'a') as ref_cmap:
