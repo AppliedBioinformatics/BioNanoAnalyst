@@ -217,6 +217,10 @@ class Main(QtGui.QMainWindow):
                 self.run_refAligner()
                 self.ui.raw_status_label.setStyleSheet('color: green')
                 self.ui.raw_status_label.setText('Finished !')
+                name = self.ref.rsplit('/',1)[-1].rsplit('.',1)[0]
+                self.rcmap = self.settings['output_path']+'/'+name+'_r.cmap'
+                self.qcmap = self.settings['output_path']+'/'+name+'_q.cmap'
+                self.xmap = self.settings['output_path']+'/'+name+'.xmap'
             except:
                 self.ui.raw_status_label.setStyleSheet('color: red')
                 self.ui.raw_status_label.setText('Crashed !')
