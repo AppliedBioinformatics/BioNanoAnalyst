@@ -579,3 +579,38 @@ class BioNano(object):
         self.q_dis_a = pd.DataFrame(q_dis_a,columns=['index','contig','siteID','position','numSites'])
         self.both = pd.DataFrame(both,columns=['index','contig','siteID','position','numSites'])
 
+def make_RefCmap(fasta_file, enz=None, min_len=20, min_nsite=5, path=None):
+    name = fasta_file.rsplit('.',1)[0].split('/')[-1]
+    index = 0
+    enzymes = {'BspQI':'GCTCTTC',
+                'BbvCI':'CCTCAGC',
+                'Bsml':'GAATGC',
+                'BsrDI':'GCAATG',
+                'bseCI':'ATCGAT',
+                'BssSI':'CACGAG'}
+    try:
+        cmap_file='%s/%s_%s_%sKb_%slabels.cmap'%(path,name,enz,min_len,min_nsite)
+        forwards = enzymes[enz]
+        reverse = str(Seq(forwards).reverse_complement())
+        with open (cmap_file,'a') as ref_cmap:
+            ref_cmap.write('# CMAP File Version:\t0.1\n')
+            ref_cmap.write('# Label Channels:\t1\n')
+            ref_cmap.write('# Nickase Recognition Site 1:\t%s\n'%forwards)
+            ref_cmap.write('# Enzyme1:\tNt.%s\n'%enz)
+            ref_cmap.write('# Number of Consensus Nanomaps:\tN/A\n')
+            ref_cmap.write('#h CMapId\tContigLength\tNumSites\tSiteID\tLabelChannel\tPosition\tStdDev\tCoverage\tOccurrence\n')
+            ref_cmap.write('#f int\tfloat\tint\tint\tint\tfloat\tfloat\tint\tint\n')
+            for seqs in SeqIO.parse(fasta_file,'fasta'):
+       	        seq = str(seqs.seq.upper())
+       	        seq_len = len(seq)
+       	        index+=1
+       	        if seq_len >= min_len*1000:
+                    nsites = len(re.findall('%s|%s'%(forwards,reverse),seq))
+                    if nsites >=min_nsite:
+                        j=1
+                        for o in re.finditer('%s|%s'%(forwards,reverse),seq):
+                            ref_cmap.write('%s\t%.1f\t%d\t%d\t1\t%.1f\t1.0\t1\t1\n'%(index,seq_len,nsites,j,o.start()+1))
+                            j+=1
+                        ref_cmap.write('%s\t%.1f\t%d\t%d\t0\t%.1f\t0.0\t1\t0\n'%(index,seq_len,nsites,j,seq_len))
+    except:
+        pass

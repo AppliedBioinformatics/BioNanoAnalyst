@@ -96,7 +96,7 @@ class Main(QtGui.QMainWindow):
         #================== raw data panel ====================
         self.ui.raw_frame.setEnabled(False)
         self.ui.raw_checkBox.stateChanged.connect(self.enable_raw)
-        self.ui.enzyme_combox.addItems(['BspQI','BbvCI','BsmI','BsrDI','bseCI'])
+        self.ui.enzyme_combox.addItems(['BspQI','BbvCI','BsmI','BsrDI','bseCI','BssSI'])
         self.ui.enzyme_combox.activated[str].connect(self.enzyme)
         self.ui.raw_select_bn.clicked.connect(self.select_bnx)
         self.ui.raw_clear_bn.clicked.connect(self.clear_bnx)
