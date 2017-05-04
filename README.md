@@ -83,6 +83,13 @@ PyQt4 or PySide (https://www.riverbankcomputing.com/software/pyqt/download or $p
   1. Please download the source code 
 
   2. After install python and all required python packages, please run the application using $ python App.py.
+  
+
+
+BioNanoAnalyst uses hashtables to store information, which is efficient in memeroy use. In the design of BioNanoAnalyst, most of the running time, it will use one CPU, while at some stage, it will use all CPUs -1.
+
+In the test of E.coli (5Mb), clover (500Mb), canola (1000Mb) and human (3Gb) data, the peak memory consumptions were: ~100Mb, ~1G, ~1.5Gb and ~3.6 Gb respectively. The running time varies depending on the computational resource users have. On a local Windows 7 64-bit platform with an Intel i7-4790@3.60GHz processor (8 cores), the running time for the four datasets were: ~10s, ~2mins, ~20mins and ~4.64 hrs. Users can base on those to estimate their own running time and computational resource requirement.
+
 
 A [tutorial](https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to-run-BioNanoAnalyst) is also given in the Wiki page to show how to run BioNanoAnalyst: 
 
