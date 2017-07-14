@@ -96,3 +96,6 @@ A [tutorial](https://github.com/AppliedBioinformatics/BioNanoAnalyst/wiki/How-to
 #Note: 
 
 When running BioNanAnalyst, the application may get stuck, please leave it alone until the job finished. 
+
+# Citation:
+Yuxuan Yuan, Philipp E. Bayer, Armin Scheben, Chon-Kit Kenneth Chan and David Edwards (2017); BioNanoAnalyst: a visualisation tool to assess genome assembly quality using BioNano data. BMC Bioinformatics. doi: 10.1186/s12859-017-1735-4
