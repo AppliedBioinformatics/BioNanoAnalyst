@@ -972,12 +972,12 @@ class Main(QtGui.QMainWindow):
         except:
             pass
         try:
-            self.ui.textBrowser.append('filtered\t%s\t%.2f\t\t%.2f\t\t%.2f'%(filtered,filtered_len/1.0e6,filtered_len/1.0e4/ref_len,float(filtered)/ref_ctgs*100))
+            self.ui.textBrowser.append('Filtered\t%s\t%.2f\t\t%.2f\t\t%.2f'%(filtered,filtered_len/1.0e6,filtered_len/1.0e4/ref_len,float(filtered)/ref_ctgs*100))
         except:
             pass
         self.ui.textBrowser.append('Mapped\t%s\t%.2f\t\t%.2f\t\t%.2f'%(mapped,mapped_len/1.0e6,mapped_len/1.0e4/ref_len,float(mapped)/ref_ctgs*100))
         self.ui.textBrowser.append('BioNano\t%s\t%.2f\t\tNA\t\tNA\n'%(BN,BN_len))
-        self.ui.textBrowser.append('Note: The totoal length of Ns in the reference is %s Mb.\n'%ref_N)
+        self.ui.textBrowser.append('Note: The total length of Ns in the reference is %s Mb.\n'%ref_N)
         self.unqualified_len = unqualified_len
         self.mapped_len = mapped_len
         self.no_mapping_len = no_mapping_len
